@@ -1,0 +1,36 @@
+GET http://localhost:3000/movies
+
+#### recupera una pelicula por id
+
+GET  http://localhost:3000/movies/c8a7d63f-3b04-44d3-9d95-8782fd7dcfaf
+
+### recupera todas las peliculas
+
+GET http://localhost:3000/movies?genre=action
+
+### crear una pelicula
+
+POST http://localhost:3000/movies
+Content-Type: application/json
+
+{
+    "sql": "SELECT * FROM",
+    "title": "The Godfather",
+    "year": 1975,
+    "director": "Francis Ford Coppola",
+    "duration": 175,
+    "poster": "https://i.pinimg.com/564x/21/5d/27/215d27dd273e0a6e142789241381b209.jpg",
+    "genre": [
+        "Crime",
+        "Drama"
+    ]
+}
+
+### ACTUALIZAR UNA MOVIE
+
+PATCH  http://localhost:3000/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+Content-Type: application/json
+
+{
+    "year": 1999
+}
