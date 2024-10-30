@@ -17,7 +17,7 @@
         }
     </style>
     <script type="module">
-        fetch('http://localhost:3000/movies')
+        fetch('http://localhost:3000/Schema/movies')
         .then(res => res.json())
         .then(movies =>{
             const html = movies.map(movie =>{

@@ -1,15 +1,18 @@
-const express = require('express')
-const crypto = require('node:crypto')
-const movies = require('./movies.json')
-const {validateMovie, validatePartialMovie} = require('./Schema/movies.js')
+import express, { json } from 'express'
+import { randomUUID } from 'node:crypto'
+import { validateMovie, validatePartialMovie } from './Schema/movies.js'
+
+import fs from 'node:fs'
+
+const movies = JSON.parse(fs.readFileSync('./Schema/movies.json','utf-8'))
 
 const app = express()
 
-app.use(express.json())
+app.use(json())
 
 app.disable('x-powered-by')
 
-app.get('/movies', (req, res) => {
+app.get('./Schema/movies', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*')
 
   const { genre } = req.query
@@ -22,7 +25,7 @@ app.get('/movies', (req, res) => {
   res.json(movies)
 })
 
-app.get('/movies/:id', (req, res) => {
+app.get('./Schema/movies/:id', (req, res) => {
   const {id} = req.params
   const movie = movies.find(movie => movie.id === id)
   if (movie) return res.json(movie)
@@ -30,14 +33,14 @@ app.get('/movies/:id', (req, res) => {
   res.status(404).json({message: 'movie not found'})
 })
 
-app.post('/movies', (req, res) => {
+app.post('./Schema/movies', (req, res) => {
   const result = validateMovie(req.body)
 
   if (result.error) {
     return res.status(400).json({error: JSON.parse(result.error.message)})
   }
   const newMovies = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     ...result.data
   }
 
@@ -46,7 +49,7 @@ app.post('/movies', (req, res) => {
   res.status(201).json(newMovies)
 })
 
-app.patch('/movies/:id', (req, res) => {
+app.patch('./Schema/movies/:id', (req, res) => {
   const result = validatePartialMovie(req.body)
   if (!result.success) {
     return res.status(400).json({error: JSON.parse(result.error.message)})
